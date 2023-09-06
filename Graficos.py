@@ -1,7 +1,7 @@
 # main.py
 import tkinter as tk
 from tkinter import Label, Button
-from PIL import Image, ImageTk
+import cv2
 import random
 from instrumento import Instrumento
 from musico import Músico
@@ -13,8 +13,11 @@ instrumentos = [Instrumento("Piano"), Instrumento("Guitarra"), Instrumento("Bajo
 def mostrar_imagen_aleatoria():
     musico = Músico("Músico", random.choice(instrumentos))
     imagen_path = f"imagenes/{musico.instrumento.nombre}.png"
-    imagen = Image.open(imagen_path)
-    imagen = imagen.resize((200, 200), Image.ANTIALIAS)
+    imagen = cv2.imread(imagen_path)
+    imagen = cv2.cvtColor(imagen, cv2.COLOR_BGR2RGB)
+    imagen = cv2.resize(imagen, (200, 200))
+
+    imagen = Image.fromarray(imagen)
     imagen = ImageTk.PhotoImage(imagen)
 
     imagen_label.config(image=imagen)
