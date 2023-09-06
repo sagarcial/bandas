@@ -18,7 +18,11 @@ class Piano(Instrumento):
         super().__init__("Piano")
     def tocar(self):
         print("Tocando piano: ¡plink plink!")
-
+class Flauta(Instrumento):
+    def __init__(self):
+        super().__init__("Flauta")
+    def tocar(self):
+        print("Tocando flauta: ¡flauta flauta!")
 class Guitarra(Instrumento):
     def __init__(self):
         super().__init__("Guitarra")
