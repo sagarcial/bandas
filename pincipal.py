@@ -3,7 +3,7 @@ from instrumento import *
 
 if __name__ == "__main__":
     # Crear una banda con algunos instrumentos
-    b = Banda("Los Rítmicos", [Piano(), Guitarra(), Saxofon(), Bajo()])
+    b = Banda("Los Rítmicos", [Piano(), Guitarra(), Saxofon(), Bajo(), Flauta()])
     
     # Crear músicos aleatorios
     b.crear()
