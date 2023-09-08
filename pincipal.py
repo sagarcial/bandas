@@ -1,9 +1,3 @@
-
-Mostrar imágenes de instrumentos
-
-Default (GPT-3.5)
-
-User
 from banda import *
 from instrumento import *
 
