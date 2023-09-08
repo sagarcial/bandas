@@ -1,35 +1,56 @@
-# main.py
 import tkinter as tk
-from tkinter import Label, Button
-from PIL import Image, ImageTk
-import random
+from random import choice, randint
+from banda import Banda
+from musico import Musico
 from instrumento import Instrumento
-from musico import Músico
 
-# Crear una lista de instrumentos
-instrumentos = [Instrumento("Piano"), Instrumento("Guitarra"), Instrumento("Bajo"), Instrumento("Saxofón")]
-
-# Función para mostrar una imagen aleatoria del instrumento
-def mostrar_imagen_aleatoria():
-    musico = Músico("Músico", random.choice(instrumentos))
-    imagen_path = f"imagenes/{musico.instrumento.nombre}.png"
-    imagen = Image.open(imagen_path)
-    imagen = imagen.resize((200, 200), Image.ANTIALIAS)
-    imagen = ImageTk.PhotoImage(imagen)
-
-    imagen_label.config(image=imagen)
-    imagen_label.image = imagen
-
-# Crear la ventana principal
+# Crear una ventana principal de Tkinter
 ventana = tk.Tk()
-ventana.title("Músicos e Instrumentos")
+ventana.title("Banda Los Rítmicos")
 
-# Botón para mostrar una imagen aleatoria
-boton_mostrar = Button(ventana, text="Mostrar Instrumento Aleatorio", command=mostrar_imagen_aleatoria)
-boton_mostrar.pack(pady=10)
+# Crear una instancia de la banda y músicos
+instrumentos = [
+    Instrumento("Piano", "piano.png"),  # Reemplaza "piano.png" con la ruta correcta a la imagen
+    Instrumento("Guitarra", "guitarra.png"),
+    # Agrega más instrumentos con sus imágenes aquí
+]
+b = Banda("Los Rítmicos", instrumentos)
 
-# Label para mostrar la imagen
-imagen_label = Label(ventana)
-imagen_label.pack()
+# Función para crear músicos aleatorios y actualizar la GUI
+def crear_musicos_y_actualizar():
+    b.crear()
+    actualizar_info_banda()
+
+# Función para afinar instrumentos y actualizar la GUI
+def afinar_instrumentos_y_actualizar():
+    b.afinar_instrumentos()
+    actualizar_info_banda()
+
+# Función para actualizar la información de la banda en la GUI
+def actualizar_info_banda():
+    # Borrar cualquier información anterior
+    for widget in ventana.winfo_children():
+        widget.destroy()
+
+    # Mostrar el nombre de la banda
+    label_banda = tk.Label(ventana, text="Nombre de la banda: " + b.nombre)
+    label_banda.pack()
+
+    # Mostrar imágenes de los músicos
+    for musico in b.integrantes:
+        imagen_musico = tk.PhotoImage(file=musico.imagen)
+        label_musico = tk.Label(ventana, image=imagen_musico)
+        label_musico.image = imagen_musico
+        label_musico.pack()
+
+# Botones para crear músicos y afinar instrumentos
+boton_crear_musicos = tk.Button(ventana, text="Crear Músicos Aleatorios", command=crear_musicos_y_actualizar)
+boton_crear_musicos.pack()
+
+boton_afinar_instrumentos = tk.Button(ventana, text="Afinar Instrumentos", command=afinar_instrumentos_y_actualizar)
+boton_afinar_instrumentos.pack()
+
+# Inicializar la GUI con la información inicial de la banda
+actualizar_info_banda()
 
 ventana.mainloop()
