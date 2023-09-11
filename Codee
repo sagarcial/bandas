@@ -10,7 +10,9 @@ mi_banda.crear()
 def afinar_instrumentos_y_mostrar_info():
     afinar_text.delete(1.0, tk.END)  # Limpiar el área de texto de afinado
     afinar_text.insert(tk.END, "Afinando...\n")  # Mostrar "Afinando..." en el área de texto
-    mi_banda.afinar_instrumentos()
+    for musico in mi_banda.integrantes:
+        afinar_text.insert(tk.END, f"Afinando {musico.instrumento_toca.nombre}...\n")
+        musico.afinar_instrumento()
     mostrar_informacion()
 
 # Función para mostrar la información de la banda en la interfaz
@@ -33,7 +35,7 @@ root.title("Banda Musical")
 # Crear botones y elementos de interfaz
 afinar_button = tk.Button(root, text="Afinar Instrumentos", command=afinar_instrumentos_y_mostrar_info)
 info_text = tk.Text(root, width=40, height=10)
-afinar_text = tk.Text(root, width=40, height=1)
+afinar_text = tk.Text(root, width=40, height=4)
 
 # Colocar los elementos en la ventana
 afinar_button.pack()
