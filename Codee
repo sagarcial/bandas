@@ -10,10 +10,18 @@ mi_banda.crear()
 def afinar_instrumentos():
     mi_banda.afinar_instrumentos()
 
-# Función para mostrar la información de la banda
+# Función para mostrar la información de la banda en la interfaz
 def mostrar_informacion():
     info_text.delete(1.0, tk.END)  # Limpiar el área de texto
-    mi_banda.consultar()  # Consultar y mostrar información en el área de texto
+    info_text.insert(tk.END, "Nombre de la banda: " + mi_banda.nombre + "\n")
+    
+    info_text.insert(tk.END, "Instrumentos en la banda:\n")
+    for instrumento in mi_banda.instrumentos:
+        info_text.insert(tk.END, "- " + instrumento.nombre + "\n")
+    
+    info_text.insert(tk.END, "Integrantes de la banda:\n")
+    for musico in mi_banda.integrantes:
+        info_text.insert(tk.END, "- Nombre: " + musico.nombre + ", Instrumento: " + musico.instrumento_toca.nombre + "\n")
 
 # Crear la ventana de tkinter
 root = tk.Tk()
