@@ -6,9 +6,10 @@ from instrumento import Piano, Guitarra, Saxofon, Bajo, Flauta
 mi_banda = Banda("Los Rítmicos", [Piano(), Guitarra(), Saxofon(), Bajo(), Flauta()])
 mi_banda.crear()
 
-# Función para afinar los instrumentos
+# Función para afinar los instrumentos y mostrar información
 def afinar_instrumentos():
     mi_banda.afinar_instrumentos()
+    mostrar_informacion()
 
 # Función para mostrar la información de la banda en la interfaz
 def mostrar_informacion():
@@ -28,14 +29,15 @@ root = tk.Tk()
 root.title("Banda Musical")
 
 # Crear botones y elementos de interfaz
-afinar_button = tk.Button(root, text="Afinar Instrumentos", command=afinar_instrumentos)
-info_button = tk.Button(root, text="Mostrar Información", command=mostrar_informacion)
+afinar_button = tk.Button(root, text="Afinar Instrumentos y Mostrar Información", command=afinar_instrumentos)
 info_text = tk.Text(root, width=40, height=10)
 
 # Colocar los elementos en la ventana
 afinar_button.pack()
-info_button.pack()
 info_text.pack()
+
+# Mostrar información inicial al iniciar la aplicación
+mostrar_informacion()
 
 # Iniciar la aplicación de tkinter
 root.mainloop()
