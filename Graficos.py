@@ -17,14 +17,14 @@ class BandaApp:
         self.crear_banda_button = ttk.Button(root, text="Crear Banda", command=self.crear_banda)
         self.crear_banda_button.pack()
         
-        self.instruments_folder = "instrumentos/"  # Carpeta donde se encuentran las imágenes de los instrumentos
+  # Carpeta donde se encuentran las imágenes de los instrumentos
         
         self.instruments_images = {
-            "Piano": tk.PhotoImage(file=self.instruments_folder + "piano.png"),
-            "Flauta": tk.PhotoImage(file=self.instruments_folder + "flauta.png"),
-            "Guitarra": tk.PhotoImage(file=self.instruments_folder + "guitarra.png"),
-            "Saxofon": tk.PhotoImage(file=self.instruments_folder + "saxofon.png"),
-            "Bajo": tk.PhotoImage(file=self.instruments_folder + "bajo.png"),
+            "Piano": tk.PhotoImage("piano.png"),
+            "Flauta": tk.PhotoImage("flauta.png"),
+            "Guitarra": tk.PhotoImage( "guitarra.png"),
+            "Saxofon": tk.PhotoImage("saxofon.png"),
+            "Bajo": tk.PhotoImage("bajo.png"),
         }
         
         self.instrumentos_label = ttk.Label(root, text="Instrumentos:")
