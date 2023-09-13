@@ -1,70 +1,64 @@
 import tkinter as tk
-from tkinter import ttk
-from musico import Musico
-from instrumento import Instrumento
-from random import choice, randint
+from PIL import Image, ImageTk  # Importa PIL (Pillow) para trabajar con imágenes
+from banda import Banda
+from instrumento import Piano, Guitarra, Saxofon, Bajo, Flauta
 
-class BandaApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Banda Musical")
-        
-        self.nombre_banda_label = ttk.Label(root, text="Nombre de la banda:")
-        self.nombre_banda_label.pack()
-        self.nombre_banda_entry = ttk.Entry(root)
-        self.nombre_banda_entry.pack()
-        
-        self.crear_banda_button = ttk.Button(root, text="Crear Banda", command=self.crear_banda)
-        self.crear_banda_button.pack()
-        
-  # Carpeta donde se encuentran las imágenes de los instrumentos
-        
-        self.instruments_images = {
-            "Piano": tk.PhotoImage("piano.png"),
-            "Flauta": tk.PhotoImage("flauta.png"),
-            "Guitarra": tk.PhotoImage( "guitarra.png"),
-            "Saxofon": tk.PhotoImage("saxofon.png"),
-            "Bajo": tk.PhotoImage("bajo.png"),
-        }
-        
-        self.instrumentos_label = ttk.Label(root, text="Instrumentos:")
-        self.instrumentos_label.pack()
-        
-        self.instrumentos_listbox = tk.Listbox(root, selectmode=tk.MULTIPLE)
-        self.instrumentos_listbox.pack()
-        for instrument in self.instruments_images.keys():
-            self.instrumentos_listbox.insert(tk.END, instrument)
-        
-        self.cargar_imagenes_button = ttk.Button(root, text="Cargar Imágenes", command=self.cargar_imagenes)
-        self.cargar_imagenes_button.pack()
-        
-        self.musico_label = ttk.Label(root, text="Músicos:")
-        self.musico_label.pack()
-        self.musico_text = tk.Text(root, height=10, width=40)
-        self.musico_text.pack()
-        
-    def crear_banda(self):
-        nombre_banda = self.nombre_banda_entry.get()
-        selected_instruments = [self.instrumentos_listbox.get(i) for i in self.instrumentos_listbox.curselection()]
-        
-        self.banda = banda(nombre_banda, selected_instruments)
-        
-        self.actualizar_musico_text()
-    
-    def cargar_imagenes(self):
-        for musico in self.banda.integrantes:
-            instrument = musico.instrumento_toca.nombre
-            if instrument in self.instruments_images:
-                self.musico_text.image_create(tk.END, image=self.instruments_images[instrument])
-                self.musico_text.insert(tk.END, f"\n{musico.nombre} - {instrument}\n")
-    
-    def actualizar_musico_text(self):
-        self.musico_text.delete(1.0, tk.END)
-        if hasattr(self, 'banda'):
-            for musico in self.banda.integrantes:
-                self.musico_text.insert(tk.END, f"{musico.nombre} - {musico.instrumento_toca.nombre}\n")
+# Crear una instancia de la banda y músicos
+mi_banda = Banda("Los Rítmicos", [Piano(), Guitarra(), Saxofon(), Bajo(), Flauta()])
+mi_banda.crear()
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = BandaApp(root)
-    root.mainloop()
+# Crear una función para cargar imágenes de los instrumentos
+def cargar_imagenes():
+    imagenes = {}
+    for musico in mi_banda.integrantes:
+        instrumento_nombre = musico.instrumento_toca.nombre.lower()
+        imagen_path = f"{instrumento_nombre}.png"  # Asegúrate de que tienes las imágenes en la misma carpeta
+        imagen = Image.open(imagen_path)  # Abre la imagen con PIL
+        imagen_tk = ImageTk.PhotoImage(imagen)  # Convierte la imagen a un formato que tkinter pueda mostrar
+        imagenes[instrumento_nombre] = imagen_tk
+    return imagenes
+
+# Función para afinar los instrumentos y mostrar información en la interfaz
+def afinar_instrumentos_y_mostrar_info():
+    afinar_text.delete(1.0, tk.END)  # Limpiar el área de texto de afinado
+    afinar_text.insert(tk.END, "Afinando...\n")  # Mostrar "Afinando..." en el área de texto
+    imagenes = cargar_imagenes()  # Cargar imágenes de los instrumentos
+    for musico in mi_banda.integrantes:
+        instrumento_nombre = musico.instrumento_toca.nombre.lower()
+        afinar_text.insert(tk.END, f"Afinando {musico.instrumento_toca.nombre}...\n")
+        afinar_text.image_create(tk.END, image=imagenes[instrumento_nombre])  # Mostrar la imagen
+        musico.afinar_instrumento()
+    mostrar_informacion()
+
+# Función para mostrar la información de la banda en la interfaz
+def mostrar_informacion():
+    info_text.delete(1.0, tk.END)  # Limpiar el área de texto de información
+    info_text.insert(tk.END, "Nombre de la banda: " + mi_banda.nombre + "\n")
+    
+    info_text.insert(tk.END, "Instrumentos en la banda:\n")
+    for instrumento in mi_banda.instrumentos:
+        info_text.insert(tk.END, "- " + instrumento.nombre + "\n")
+    
+    info_text.insert(tk.END, "Integrantes de la banda:\n")
+    for musico in mi_banda.integrantes:
+        info_text.insert(tk.END, "- Nombre: " + musico.nombre + ", Instrumento: " + musico.instrumento_toca.nombre + "\n")
+
+# Crear la ventana de tkinter
+root = tk.Tk()
+root.title("Banda Musical")
+
+# Crear botones y elementos de interfaz
+afinar_button = tk.Button(root, text="Afinar Instrumentos", command=afinar_instrumentos_y_mostrar_info)
+info_text = tk.Text(root, width=40, height=10)
+afinar_text = tk.Text(root, width=40, height=4)
+
+# Colocar los elementos en la ventana
+afinar_button.pack()
+afinar_text.pack()
+info_text.pack()
+
+# Mostrar información inicial al iniciar la aplicación
+mostrar_informacion()
+
+# Iniciar la aplicación de tkinter
+root.mainloop()
